@@ -38,7 +38,6 @@ class Game {
             mapTile.transformToRock()
             this.app?.stage.addChild(mapTile)
         })
-        console.log(this.generator.map)
     }
 }
 

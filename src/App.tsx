@@ -19,9 +19,9 @@ function App() {
     }, [game])
 
 
-    useEffect(() => {
-        generateMapHandle()
-    }, [seed, seaLevel, roughness, mountainess, debugNoise, generateMapHandle])
+    // useEffect(() => {
+    //     generateMapHandle()
+    // }, [seed, seaLevel, roughness, mountainess, debugNoise, generateMapHandle])
 
 
     return (

@@ -1,6 +1,7 @@
 import SimplexNoise from 'simplex-noise'
+import { scaleNumber } from './Helpers'
 
-export type MatrixEachCallback = (x: number, y: number, v: number) => void
+export type MatrixEachCallback = (x: number, y: number, v: number, index: number) => void
 export type MatrixBlendCallback = (v1: number, v2: number) => number
 
 class Matrix {
@@ -33,6 +34,26 @@ class Matrix {
         })
     }
 
+    scale(min: number, max: number): void {
+        let maxValue = 0
+        let minValue = 0
+        this.each((_, __, v, index) => {
+            if (index === 0) {
+                maxValue = v
+                minValue = v
+            } else {
+                maxValue = maxValue < v ? v : maxValue
+                minValue = minValue > v ? v : minValue
+            }
+        })
+
+        this.each((x, y, v) => {
+            const scaledValue = scaleNumber(v, minValue, maxValue, min, max)
+            this.set(x, y, scaledValue)
+        })
+        // console.log(minValue, maxValue)
+    }
+
     addMatrix(secondMatrix: Matrix): void {
         this.each((x, y, v) => {
             const valueToAdd = secondMatrix.get(x, y)
@@ -52,9 +73,11 @@ class Matrix {
     }
 
     each(callback: MatrixEachCallback): void {
+        let index = 0
         for (let y = 0; y < this.matrix.length; y++) {
             for (let x = 0; x < this.matrix[y].length; x++) {
-                callback(x, y, this.get(x, y))
+                callback(x, y, this.get(x, y), index)
+                index++
             }
         }
     }
