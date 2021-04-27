@@ -27,14 +27,19 @@ class Matrix {
     }
 
     get(x: number, y: number): number {
-        return this.matrix[y][x]
+        if (typeof this.matrix[y] !== 'undefined' && typeof this.matrix[y][x] !== 'undefined') {
+            return this.matrix[y][x]
+        }
+        return 0
     }
 
     set(x: number, y: number, v: number): void {
         this.matrix[y][x] = v
     }
 
-    
+    applyMatrix(matrix: Matrix): void {
+        this.eachSet(({ x, y }) => matrix.get(x, y))
+    }
 
     each(callback: MatrixEachCallback): void {
         let index = 0
@@ -74,7 +79,36 @@ class Matrix {
             const scaledValue = scaleNumber(v, minValue, maxValue, min, max)
             this.set(x, y, scaledValue)
         })
-        // console.log(minValue, maxValue)
+    }
+
+    absolute(): void {
+        this.eachSet(({ v }) => Math.abs(v))
+    }
+
+    treshold(treshold: number): void {
+        this.eachSet(({ v }) => (v > treshold ? 1 : 0))
+    }
+
+    inverse(): void {
+        this.eachSet(({ v }) => v * -1 + 1)
+    }
+
+    smooth(steps = 3): void {
+        for (let i = 0; i < steps; i++) {
+            this.eachSet(({ x, y, v }) => {
+                const sumAdjacent =
+                    this.get(x - 1, y - 1) +
+                    this.get(x, y - 1) +
+                    this.get(x + 1, y - 1) +
+                    this.get(x - 1, y) +
+                    v +
+                    this.get(x + 1, y) +
+                    this.get(x - 1, y + 1) +
+                    this.get(x, y + 1) +
+                    this.get(x + 1, y + 1)
+                return Math.abs(sumAdjacent) > 0 ? sumAdjacent / 9 : 1
+            })
+        }
     }
 
     addMatrix(secondMatrix: Matrix): void {

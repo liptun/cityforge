@@ -34,8 +34,15 @@ class Game {
         this.generator.start()
         this.generator.map.each(({x, y, v}) => {
             const mapTile = new Tile(x * this.tileSize, y * this.tileSize)
+            mapTile.transformToWater()
+            if (v > .5) {
+                mapTile.transformToLand()
+            }
+
+            // debug
             mapTile.alpha = v
             mapTile.transformToRock()
+
             this.app?.stage.addChild(mapTile)
         })
     }
