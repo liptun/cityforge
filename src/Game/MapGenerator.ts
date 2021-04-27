@@ -24,9 +24,6 @@ class MapGenerator {
         noiseMap.prepareMatrix(this.mapDimensions.width, this.mapDimensions.height, 0)
         noiseMap.noise('seed', 0.02)
         this.map.blendMatrix(noiseMap, (v1, v2) => v1 + v2 * 0.4)
-        // this.map.set(10, 10, 0.123)
-        // this.map.set(11, 10, 4)
-        // this.map.set(11, 1, 10)
         this.map.scale(0, 1)
 
         console.timeEnd('Map generation')
