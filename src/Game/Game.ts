@@ -5,7 +5,7 @@ import Tile from './Tile'
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 
-const MAP_SIZE = 256
+const MAP_SIZE = 128
 
 interface generatorOptions {
     seed?: string
