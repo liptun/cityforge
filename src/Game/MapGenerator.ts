@@ -11,58 +11,66 @@ class MapGenerator {
     constructor() {
         this.map = new Matrix()
         this.mapDimensions = {
-            width: 170,
-            height: 170,
+            width: 256,
+            height: 256,
         }
     }
-    start() {
+    start(seed = '') {
         const { width, height } = this.mapDimensions
         console.log('start generation')
         console.time('Map generation')
 
         this.map.prepareMatrix(width, height, 1)
-        this.map.noise('', 0.03)
-        this.map.eachSet(({ x }) => this.map.get(x, 0))
         const noiseMap = new Matrix()
         noiseMap.prepareMatrix(width, height, 0)
-        noiseMap.noise('', 0.02)
+        noiseMap.noise(seed, 15 / 1000)
         this.map.blendMatrix(noiseMap, (v1, v2) => v1 * v2)
         this.map.scale(0, 1)
 
-        const islands = new Matrix()
-        islands.prepareMatrix(width, height)
-        islands.noise('', 1.2 / 100)
-        // islands.scale(0,1)
-        islands.absolute()
-        islands.smooth(1)
-        islands.treshold(.1)
-        islands.scale(0, 1)
-        islands.inverse()
-        islands.smooth(3)
+        const rivers = new Matrix()
+        rivers.prepareMatrix(width, height)
+        rivers.noise(seed, 8 / 1000)
+        rivers.absolute()
+        rivers.treshold(0.2)
+        rivers.scale(-1, 1)
+        rivers.smooth(10)
 
-        // islands.eachSet(({ v }) => (v > 0.3 ? 1 : 0))
-
-        const islands2 = new Matrix()
-        // islands.prepareMatrix(width, height)
-        // islands.noise('', 1.2 / 100)
-        // // islands.eachSet(({ v }) => (v > 0.3 ? 1 : 0))
-        // islands.smooth(10)
-
-        // islands.addMatrix(islands2)
-        // islands.scale(0, 1)
-
-        this.map.multiplyMatrix(islands)
+        this.map.addMatrix(rivers)
 
         const mountains = new Matrix()
         mountains.prepareMatrix(width, height)
-        mountains.noise('', 1.2 / 10)
-        mountains.scale(0, 0.2)
+        mountains.noise(seed, 25 / 1000)
+        mountains.absolute()
+        mountains.scale(0, 1)
+        mountains.inverse()
+        mountains.smooth(10)
 
-        this.map.blendMatrix(mountains, (v1, v2) => (v1 > 0.1 ? v1 + v2 : v1))
+        this.map.addMatrix(mountains)
+        this.map.smooth(50)
+
+        const sharpness = new Matrix()
+        sharpness.prepareMatrix(width, height)
+        sharpness.noise(seed, 40 / 1000)
+
+        this.map.addMatrix(sharpness)
+
+        const sharpness2 = new Matrix()
+        sharpness2.prepareMatrix(width, height)
+        sharpness2.noise(seed, 60 / 1000)
+
+        this.map.addMatrix(sharpness2)
 
         this.map.scale(0, 1)
 
-        this.map.applyMatrix(islands)
+        rivers.inverse()
+        rivers.treshold(.5)
+        rivers.smooth(10)
+        rivers.scale(.6, 1.8)
+
+        this.map.multiplyMatrix(rivers)
+        this.map.smooth(4)
+
+
 
         console.timeEnd('Map generation')
     }

@@ -8,9 +8,9 @@ class Game {
     app: PIXI.Application | null = null
     canvasSelector = '#game'
     canvasElement: HTMLCanvasElement | null
-    canvasWidth = 1280
-    canvasHeight = 720
-    tileSize = 4
+    canvasWidth = 256 * 3
+    canvasHeight = 256 * 3
+    tileSize = 3
     generator: MapGenerator
 
     constructor() {
@@ -30,18 +30,28 @@ class Game {
         })
     }
 
-    generateMap() {
-        this.generator.start()
-        this.generator.map.each(({x, y, v}) => {
+    generateMap(seed = '') {
+        this.app?.stage?.removeChildren()
+        this.generator.start(seed)
+        this.generator.map.each(({ x, y, v }) => {
             const mapTile = new Tile(x * this.tileSize, y * this.tileSize)
             mapTile.transformToWater()
-            if (v > .5) {
+            if (v > 0.4) {
+                mapTile.transformToSand()
+            }
+            if (v > 0.45) {
                 mapTile.transformToLand()
+            }
+            if (v > 0.8) {
+                mapTile.transformToDirt()
+            }
+            if (v > 0.9) {
+                mapTile.transformToRock()
             }
 
             // debug
-            mapTile.alpha = v
-            mapTile.transformToRock()
+            // mapTile.alpha = v
+            // mapTile.transformToRock()
 
             this.app?.stage.addChild(mapTile)
         })
