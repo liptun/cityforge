@@ -16,14 +16,16 @@ function App() {
             gameInstance.kill()
         }
     }, [])
-
-    useEffect(() => {
-        generateMapHandle()
-    }, [seed, seaLevel, roughness, mountainess, debugNoise])
-
+    
     const generateMapHandle = useCallback(() => {
         game?.generateMap({ seed, seaLevel, roughness, mountainess, debugNoise })
     }, [game, seed, seaLevel, roughness, mountainess, debugNoise])
+
+
+    useEffect(() => {
+        generateMapHandle()
+    }, [seed, seaLevel, roughness, mountainess, debugNoise, generateMapHandle])
+
 
     return (
         <div className="App">
