@@ -9,8 +9,8 @@ import dirtTile from './assets/dirt.png'
 class Tile extends PIXI.AnimatedSprite {
     constructor(x = 0, y = 0) {
         super([PIXI.Texture.from(defaultTile)])
-        this.width = 8
-        this.height = 8
+        this.width = 4
+        this.height = 4
         this.x = x
         this.y = y
     }
