@@ -12,14 +12,11 @@ function App() {
     useEffect(() => {
         const gameInstance = new Game()
         setGame(gameInstance)
-        return () => {
-            gameInstance.kill()
-        }
     }, [])
     
     const generateMapHandle = useCallback(() => {
-        game?.generateMap({ seed, seaLevel, roughness, mountainess, debugNoise })
-    }, [game, seed, seaLevel, roughness, mountainess, debugNoise])
+        game?.generateMap()
+    }, [game])
 
 
     useEffect(() => {
