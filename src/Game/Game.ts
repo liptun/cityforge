@@ -8,7 +8,7 @@ class Game {
     app: PIXI.Application | null = null
     canvasSelector = '#game'
     canvasElement: HTMLCanvasElement | null
-    canvasWidth = 64 * 8
+    canvasWidth = 64 * 8 * 2
     canvasHeight = 64 * 8
     tileSize = 8
     generator: MapGenerator
@@ -49,11 +49,14 @@ class Game {
                 mapTile.transformToRock()
             }
 
+            const debugTile = new Tile(x * this.tileSize + 64 * 8, y * this.tileSize)
+
             // debug
-            // mapTile.alpha = v
-            // mapTile.transformToRock()
+            debugTile.alpha = v
+            debugTile.transformToRock()
 
             this.app?.stage.addChild(mapTile)
+            this.app?.stage.addChild(debugTile)
         })
     }
 }
