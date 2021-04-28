@@ -11,8 +11,8 @@ class MapGenerator {
     constructor() {
         this.map = new Matrix()
         this.mapDimensions = {
-            width: 256,
-            height: 256,
+            width: 64,
+            height: 64,
         }
     }
     start(seed = '') {

@@ -8,9 +8,9 @@ class Game {
     app: PIXI.Application | null = null
     canvasSelector = '#game'
     canvasElement: HTMLCanvasElement | null
-    canvasWidth = 256 * 3
-    canvasHeight = 256 * 3
-    tileSize = 3
+    canvasWidth = 64 * 8
+    canvasHeight = 64 * 8
+    tileSize = 8
     generator: MapGenerator
 
     constructor() {
